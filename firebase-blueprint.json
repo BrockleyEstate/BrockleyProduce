@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the marketplace, either a consumer or a farmer.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["consumer", "farmer"] },
+        "farmName": { "type": "string", "description": "Only for farmers" },
+        "location": { "type": "string", "description": "Only for farmers" },
+        "fullStory": { "type": "string", "description": "Only for farmers" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "A product listed by a farmer.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "unit": { "type": "string" },
+        "category": { "type": "string", "enum": ["meat", "veg", "dairy", "eggs", "pantry", "more"] },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "farmerId": { "type": "string", "description": "UID of the farmer" },
+        "productionDetails": { "type": "array", "items": { "type": "string" } },
+        "inStock": { "type": "boolean" },
+        "deliveryOptions": { "type": "array", "items": { "type": "string" } },
+        "brockleyDeliveryFee": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "description", "price", "unit", "category", "farmerId", "inStock", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review left by a consumer for a farmer or product.",
+      "type": "object",
+      "properties": {
+        "farmerId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "rating": { "type": "number", "description": "1 to 5" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["farmerId", "buyerId", "buyerName", "rating", "comment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Users collection"
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Products collection"
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Reviews collection"
+    }
+  }
+}
